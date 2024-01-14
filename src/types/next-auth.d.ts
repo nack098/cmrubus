@@ -20,5 +20,6 @@ interface Data {
     date: string,
     time: string,
     name: string,
-    tel: string
+    tel: string,
+    userId: string
 }

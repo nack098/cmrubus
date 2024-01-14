@@ -7,3 +7,5 @@ export default function Dashboard() {
         </>
     )
 }
+
+export const revalidate = 0;

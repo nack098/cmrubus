@@ -37,10 +37,12 @@ export default function Login() {
                 >
                     <p className="text-xl font-semibold mt-2">Login</p>
                     <div className="ml-4 my-2">
-                        <label>Username :</label><br/>
-                        <input type="text" name="username" className="rounded-md px-3 py-[0.15rem] bg-zinc-300"></input><br/>
-                        <label>Password :</label><br/>
-                        <input type="password" name="password" className="rounded-md px-3 py-[0.15rem] bg-zinc-300"></input><br/>
+                        <label>Username :<br/>
+                            <input type="text" name="username" className="rounded-md px-3 py-[0.15rem] bg-zinc-300"></input><br/>
+                        </label>
+                        <label>Password :<br/>
+                            <input type="password" name="password" className="rounded-md px-3 py-[0.15rem] bg-zinc-300"></input><br/>
+                        </label>
                         <div className={`flex flex-col w-full justify-center ${error?"mt-[0px]":"mt-5"}`}>
                         {error?<p className="text-right w-full text-red-600 font-semibold text-sm">Error: {error.replaceAll("_", " ")}</p>:null}
                             <input type="submit" value="Login" className="text-center mb-2 py-1 rounded-lg bg-[#fcbe20] hover:bg-red-400 duration-200 cursor-pointer"/>

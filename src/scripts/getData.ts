@@ -1,39 +1,12 @@
+import { db } from "@/database/database";
 import { Data } from "@/types/next-auth";
-import { mock } from "node:test";
-
-const mocks:Data[] = [
-    {
-        date: "2023-12-27",
-        time: "10:00",
-        name: "nack",
-        tel: "0988889230"
-    },
-    {
-        date: "2023-12-27",
-        time: "10:00",
-        name: "nack",
-        tel: "0988889230"
-    },
-    {
-        date: "2023-12-27",
-        time: "10:00",
-        name: "nack",
-        tel: "0988889230"
-    },
-    {
-        date: "2023-12-27",
-        time: "10:00",
-        name: "nack",
-        tel: "0988889230"
-    },
-    {
-        date: "2023-12-27",
-        time: "10:00",
-        name: "nack",
-        tel: "0988889230"
-    },
-];
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 export default async function getData(userId:string):Promise<Data[]> {
-    return mocks;
+    const rawData = await getDocs(query(collection(db, "reserveList"), where("userId", "==", userId)))
+    const data:Data[] = [] 
+    rawData.forEach((value) => {
+        data.push(value.data() as Data)
+    })
+    return data;
 }

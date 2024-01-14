@@ -1,6 +1,9 @@
+import { db } from "@/database/database";
 import { NextAuthOptions, Session, User } from "next-auth";
+import bcrypt from 'bcrypt';
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials"
+import { collection, getDocs, query, where } from "firebase/firestore";
 
 export const authOptions:NextAuthOptions = {
     providers: [
@@ -10,8 +13,20 @@ export const authOptions:NextAuthOptions = {
                 username: {label: "username", type: "text"},
                 password: {label: "password", type: "password"}
             },
-            async authorize() {
-                return { id: "12314120", name:"nack" , role: "driver"}
+            async authorize(credentials) {
+                if (!credentials) return null;
+                const data = await getDocs(query(collection(db, "users"), where('username', '==', credentials.username)))
+                let user:any;
+                data.forEach((value:any) => {
+                    const data = value.data();
+                    if (bcrypt.compareSync(credentials.password, data.password)){
+                        const dummy = {id: value.id, ...data};
+                        const {password, ...userData} = dummy;
+                        user = userData;
+                    }
+                })
+                if (user) return user;
+                return null;
             }
        }) 
     ],
@@ -23,9 +38,7 @@ export const authOptions:NextAuthOptions = {
             if (user) {
                 return {
                     ...token,
-                    id: user.id,
-                    name: user.name,
-                    role: user.role
+                    ...user,
                 }
             }
             return token;
@@ -37,7 +50,8 @@ export const authOptions:NextAuthOptions = {
                     ...session.user,
                     id: token.id,
                     name: token.name,
-                    role: token.role
+                    role: token.role,
+                    ...token,
                 }
             }
         },

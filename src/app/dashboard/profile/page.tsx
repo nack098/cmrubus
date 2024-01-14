@@ -9,9 +9,9 @@ export default function Dashboard() {
     if (status === "authenticated") {
         return (
             <div className="flex flex-col text-lg bg-white w-full h-full ml-5 rounded-xl px-8 py-8">
-                <p><b>ชื่อ :</b> {data.user?.name}</p>
-                <p><b>User ID :</b> {data.user?.id}</p>
-                <p><b>อาชีพ :</b> {data.user?.role}</p>
+                {Object.keys(data.user).map(key => {
+                    return<p>{key}: {data.user[key]}</p>
+                })}
             </div>
         )
     }else if (status === "loading") {

@@ -5,16 +5,17 @@ import { collection, doc, setDoc } from "firebase/firestore";
 
 export default function Register() {
     const RegisterAction = async (formData: FormData):Promise<void> => {
-        "use server";
+        "use server"
         const username = formData.get("username") as string;
         const password = formData.get("password") as string; 
+        const driver_id = formData.get("driver_id") as string;
         const name = formData.get("name") as string;
-        if (username.length == 0 || password.length == 0 || name.length == 0) {
+        if (username.length == 0 || password.length == 0 || driver_id.length == 0 || name.length == 0) {
             redirect(`?error=Please insert all data`, RedirectType.push);
         }
         const hashPassword = await bcrypt.hash(password, 10);
         try{
-            await setDoc(doc(collection(db, "users")), {username, name, password:hashPassword, role: "user"})
+            await setDoc(doc(collection(db, "users")), {username, driver_id, name, password:hashPassword, role: "driver"})
         }catch(err:any){
             redirect(`?error=${err}`, RedirectType.push);
         }
@@ -31,6 +32,9 @@ export default function Register() {
                         </label>
                         <label>Password :<br/>
                             <input type="text" name="password" className="rounded-md px-3 py-[0.15rem] bg-zinc-300"></input><br/>
+                        </label>
+                        <label>เลขใบขับขี่ :<br/>
+                            <input type="text" name="driver_id" className="rounded-md px-3 py-[0.15rem] bg-zinc-300"></input><br/>
                         </label>
                         <label>ชื่อ/นามสกุล :<br/>
                             <input type="text" name="name" className="rounded-md px-3 py-[0.15rem] bg-zinc-300"></input><br/>
